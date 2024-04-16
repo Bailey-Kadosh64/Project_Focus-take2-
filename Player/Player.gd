@@ -1,32 +1,32 @@
 extends KinematicBody2D
 
 # Basic Movement Variables and Constants
-var move_speed: int = 350
+var moveSpeed: int = 370
 const jump: int = -700
 const gravity: int = 30
 const UP: Vector2 = Vector2.UP
 
 #Dashing Constants
-const dash_speed: int = 800
-const dash_length: float = 0.25
+const dashSpeed: int = 800
+const dashLength: float = 0.25
 
 #Velocity as a changing variable of a blank Vector2
 var motion: Vector2  = Vector2.ZERO
 
 # Wall sliding and jumping variables
-var wall_slide_speed: int = 100
-var wall_slide_gravity: int = 200
-var is_wall_sliding: bool = true
-var num_of_left_wall_jumps = 0
-var num_of_right_wall_jumps = 0
-var wall_jump: bool = true
+var wallSlideSpeed: int = 100
+var wallSlideGravity: int = 200
+var isWallSliding: bool = true
+var leftWallJumps = 0
+var rightWallJumps = 0
+var wallJump: bool = true
 
 #Reference Nodes
 onready var dash: Node2D = $Dash
-onready var left_wall1 = $WallJump/LeftWalls/LeftWall1
-onready var left_wall2 = $WallJump/LeftWalls/LeftWall2
-onready var right_wall1 = $WallJump/RightWalls/RightWall1
-onready var right_wall2 = $WallJump/RightWalls/RightWall2
+onready var leftWall1 = $WallJump/LeftWalls/LeftWall1
+onready var leftWall2 = $WallJump/LeftWalls/LeftWall2
+onready var rightWall1 = $WallJump/RightWalls/RightWall1
+onready var rightWall2 = $WallJump/RightWalls/RightWall2
 
 func _physics_process(delta):
 	#Applying Gravity
@@ -34,8 +34,8 @@ func _physics_process(delta):
 	
 	#Dashing
 	if Input.is_action_just_pressed("Dash") and dash.can_dash and !dash.is_dashing():
-		dash.start_dash(dash_length)
-	var speed = dash_speed if dash.is_dashing() else move_speed
+		dash.start_dash(dashLength)
+	var speed = dashSpeed if dash.is_dashing() else moveSpeed
 	
 	#Basic Movement
 	if Input.is_action_pressed("MoveRight"):
@@ -48,60 +48,60 @@ func _physics_process(delta):
 	# Wall Slide
 	if is_on_wall() and !is_on_floor():
 		if Input.is_action_pressed("MoveLeft") or Input.is_action_pressed("MoveRight") or abs(Input.get_joy_axis(0,0 > 0.3)):
-			is_wall_sliding = true
+			isWallSliding = true
 		else:
-			is_wall_sliding = false
+			isWallSliding = false
 	else:
-		is_wall_sliding = false
+		isWallSliding = false
 	
-	if is_wall_sliding == true:
-		motion.y += wall_slide_gravity * delta
-		motion.y = min(motion.y, wall_slide_speed)
+	if isWallSliding == true:
+		motion.y += wallSlideGravity * delta
+		motion.y = min(motion.y, wallSlideSpeed)
 	
 	# Jumping and Wall Jumping
 	if Input.is_action_just_pressed("Jump"): 
 		if is_on_floor():
 			motion.y = jump
-			num_of_left_wall_jumps = 0
-			num_of_right_wall_jumps = 0
-		if (right_wall1.is_colliding() or right_wall2.is_colliding()) and Input.is_action_pressed("MoveRight"):
-			if num_of_right_wall_jumps < 2:
-				num_of_right_wall_jumps = num_of_right_wall_jumps + 1
+			leftWallJumps = 0
+			rightWallJumps = 0
+		if (rightWall1.is_colliding() or rightWall2.is_colliding()) and Input.is_action_pressed("MoveRight"):
+			if rightWallJumps < 2:
+				rightWallJumps = rightWallJumps + 1
 				
-				if wall_jump == true:
-					if num_of_right_wall_jumps == 1:
+				if wallJump == true:
+					if rightWallJumps == 1:
 						motion.y = jump
 						print(motion.y)
-						print(num_of_right_wall_jumps, ": right jump")
-					elif num_of_right_wall_jumps == 2:
+						print(rightWallJumps, ": right jump")
+					elif rightWallJumps == 2:
 						motion.y = jump
 						print(motion.y)
-						print(num_of_right_wall_jumps, ": right jump")
+						print(rightWallJumps, ": right jump")
 					else:
 						pass
-		if (right_wall1.is_colliding() and right_wall2.is_colliding()) and is_wall_sliding == true and Input.is_action_pressed("MoveLeft") or Input.is_action_just_pressed("MoveLeft"):
-			num_of_left_wall_jumps = 0
+		if (rightWall1.is_colliding() and rightWall2.is_colliding()) and isWallSliding == true and Input.is_action_pressed("MoveLeft") or Input.is_action_just_pressed("MoveLeft"):
+			leftWallJumps = 0
 			motion.y = jump
 		else:
 			pass
 		
-		if (left_wall1.is_colliding() or left_wall2.is_colliding()) and Input.is_action_pressed("MoveLeft"):
-			if num_of_left_wall_jumps < 2:
-				num_of_left_wall_jumps = num_of_left_wall_jumps + 1
+		if (leftWall1.is_colliding() or leftWall2.is_colliding()) and Input.is_action_pressed("MoveLeft"):
+			if leftWallJumps < 2:
+				leftWallJumps = leftWallJumps + 1
 				
-				if wall_jump == true:
-					if num_of_left_wall_jumps == 1:
+				if wallJump == true:
+					if leftWallJumps == 1:
 						motion.y = jump
 						print(motion.y)
-						print(num_of_left_wall_jumps, ": left jump")
-					elif num_of_left_wall_jumps == 2:
+						print(leftWallJumps, ": left jump")
+					elif leftWallJumps == 2:
 						motion.y = jump
 						print(motion.y)
-						print(num_of_left_wall_jumps, ": left jump")
+						print(leftWallJumps, ": left jump")
 					else:
 						pass
-		if (left_wall1.is_colliding() or left_wall2.is_colliding()) and is_wall_sliding == true and Input.is_action_pressed("MoveRight") or Input.is_action_just_pressed("MoveRight"):
-			num_of_right_wall_jumps = 0
+		if (leftWall1.is_colliding() or leftWall2.is_colliding()) and isWallSliding == true and Input.is_action_pressed("MoveRight") or Input.is_action_just_pressed("MoveRight"):
+			rightWallJumps = 0
 			motion.y = jump
 		else:
 			pass
