@@ -16,3 +16,4 @@ position = Vector2( 80, 416 )
 
 [node name="Respawn" parent="Player" instance=ExtResource( 3 )]
 position = Vector2( 352, -376 )
+script = null
