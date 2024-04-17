@@ -5,6 +5,7 @@ var moveSpeed: int = 370
 const jump: int = -700
 const gravity: int = 30
 const UP: Vector2 = Vector2.UP
+var player_position = position
 
 #Dashing Constants
 const dashSpeed: int = 800
@@ -27,6 +28,7 @@ onready var leftWall1 = $WallJump/LeftWalls/LeftWall1
 onready var leftWall2 = $WallJump/LeftWalls/LeftWall2
 onready var rightWall1 = $WallJump/RightWalls/RightWall1
 onready var rightWall2 = $WallJump/RightWalls/RightWall2
+onready var respawnPoint = $Respawn
 
 func _physics_process(delta):
 	#Applying Gravity
@@ -105,8 +107,10 @@ func _physics_process(delta):
 			motion.y = jump
 		else:
 			pass
-		
-	
+	#Respawning the player (I made it a key press for debugging purposes)
+	if Input.is_key_pressed(KEY_R):
+		position.x = respawnPoint.position.x
+		position.y = respawnPoint.position.y 
 	motion = move_and_slide(motion, UP)
 
 
