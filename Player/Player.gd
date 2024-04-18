@@ -109,8 +109,7 @@ func _physics_process(delta):
 			pass
 	#Respawning the player (I made it a key press for debugging purposes)
 	if Input.is_key_pressed(KEY_R):
-		position.x = respawnPoint.position.x
-		position.y = respawnPoint.position.y 
+		position = respawnPoint.get_position()
 	motion = move_and_slide(motion, UP)
 
 
