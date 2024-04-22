@@ -35,7 +35,7 @@ func _physics_process(delta):
 	motion.y += gravity
 	
 	#Dashing
-	if Input.is_action_just_pressed("Dash") and dash.can_dash and !dash.is_dashing():
+	if Input.is_action_just_pressed("Dash.Sprint") and dash.can_dash and !dash.is_dashing():
 		dash.start_dash(dashLength)
 	var speed = dashSpeed if dash.is_dashing() else moveSpeed
 	
@@ -108,8 +108,6 @@ func _physics_process(delta):
 		else:
 			pass
 	#Respawning the player (I made it a key press for debugging purposes)
-	if Input.is_key_pressed(KEY_R):
-		position = respawnPoint.get_position()
 	motion = move_and_slide(motion, UP)
 
 
