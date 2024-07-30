@@ -1,6 +1,6 @@
 extends Node2D
 
-var playerScene = preload("res://Player/Player.tscn")
+var playerScene = preload("res://_player/Player.tscn")
 
 func _physics_process(delta):
 	if Input.is_key_pressed(KEY_R):

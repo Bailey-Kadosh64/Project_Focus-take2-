@@ -21,7 +21,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Hyperfocus"
-run/main_scene="res://Scenes/Debug/DebugRoom.tscn"
+run/main_scene="res://_scenes/Debug/DebugRoom.tscn"
 config/icon="res://icon.png"
 
 [editor]
